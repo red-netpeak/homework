@@ -1,5 +1,5 @@
 <?php
-  function array_chunk_func($array, $val) {
+  function array_chunk_func($array, $val, $flag) {
     if (!is_array($array)) die("not array");
 
     $tmp = count($array);
@@ -9,18 +9,38 @@
     $j = 0;
     $k = 0;
 
-    while($length > 0) {
-      $temp = array();
+    if ($flag) {
+      $keys = array();
+      $values = array();
 
-      for ($j = 0; $j < $val; $j++) {
-        if (NULL === $array[$i]) break;
-        $temp[$j] = $array[$i];
+      foreach ($array as $key => $value) {
+        $keys[$i] = $key;
+        $values[$i] = $value;
         $i++;
       }
+      $start = 0;
+      for ($j = 0; $j < $length; $j++) {
+        for ($i = $start; $i < $length; $i++) {
+          $res[$keys[$i]] = $values[$i];
+        }
+        if ($res[$keys[$i]] === NULL) break;
+        $result[$j] = $res;
+      }
+    }
+    else {
+      while($length > 0) {
+        $temp = array();
 
-      $result[$k] = $temp;
-      $k++;
-      $length--;
+        for ($j = 0; $j < $val; $j++) {
+          if (NULL === $array[$i]) break;
+          $temp[$j] = $array[$i];
+          $i++;
+        }
+
+        $result[$k] = $temp;
+        $k++;
+        $length--;
+      }
     }
 
     return $result;
@@ -36,5 +56,5 @@
   var_dump(array_chunk_func($test, $parts));
 
   echo "php function result";
-  var_dump(array_chunk($test, $parts));
+  var_dump(array_chunk($test, $parts, true));
 ?>
